@@ -36,26 +36,6 @@ alias rm='rm -i'
     - `usermod -aG wheel <adminuser>`
     - Make sure the wheel group is uncommented in `/etc/skel` using the command `#visudo`
       - `%wheel ALL=(ALL) ALL`  **NOTE** `%` is NOT a comment.
-- **Harden SSH Access** by adding authentication via private/public key pair and disable password access.
-  - For **PuTTy**, use **PuTTygen** to generate private/public key pair.
-  - use 4096-bit RSA or ECDSA to generate the key pair.
-  - Save the private key in safe location and add it to the PuTTy session: `Connection -> SSH -> Auth -> Private key file for authentication`
-  - Add the public key to the Linux VM instance: `~/.ssh/authorized_keys`
-  - Andd now when loging in for that particular user, you will not require to use the password.
-- **SSH Daemon Options** in `/etc/ssh/sshd_config`:
-  - Disable _root_ login via SSH: `PermitRootLogin no`
-  - Disable _password auth_: `PasswordAuthentication no`
-  - If using only IPv4 then: `AddressFamily inet`
-  - _Restart_ ssh daemon: `sudo systemctl restart sshd`
-- Use **Fail2Ban** to avoid malicious attack through the SSH port and other ports too. **FIXME** Use the following [Linode Tutorial](https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/) to install and configure fail2ban.
-- **Configure Firewall**. The default application in Ubuntu `ufw` (Uncomplicated Firewall) is disabled. Follow the [Linode Tutorial](https://www.linode.com/docs/guides/configure-firewall-with-ufw/) to install and setup the firewall. Basic setup steps:
-  - Allow SSH connections: `sudo ufw allow ssh`
-  - Use the default rules:
-    - `sudo ufw default allow outgoing`
-    - `sudo ufw default deny incoming`
-  - Enable it: `sudo ufw enable`
-  - Check the status: `sudo ufw status`
-
 - **Install and Configure Dropbox**
   - `sudo apt-get install dropbox`
   - Login to the user you want to use Dropbox in.
@@ -160,6 +140,77 @@ If you are dealing with binaries, even pdfs docs etc, then the git repo blows pr
 - Now, the above command will purge the history from the githib repo but the backup will be created in the .git local directory so there will be no space saving in the current working driectory. Still don't know how to clean it up properly. The way I do it now is move the directory and just clone it again.
 
 ## Security
+
+### Security Hardening a Linux Server
+
+- **Harden SSH Access** by adding authentication via private/public key pair and disable password access.
+  - For **PuTTy**, use **PuTTygen** to generate private/public key pair.
+  - use 4096-bit RSA or ECDSA to generate the key pair.
+  - Save the private key in safe location and add it to the PuTTy session: `Connection -> SSH -> Auth -> Private key file for authentication`
+  - Add the public key to the Linux VM instance: `~/.ssh/authorized_keys`
+  - Andd now when loging in for that particular user, you will not require to use the password.
+- **SSH Daemon Options** in `/etc/ssh/sshd_config`:
+  - Disable _root_ login via SSH: `PermitRootLogin no`
+  - Disable _password auth_: `PasswordAuthentication no`
+  - If using only IPv4 then: `AddressFamily inet`
+  - _Restart_ ssh daemon: `sudo systemctl restart sshd`
+- Use **Fail2Ban** to secure `sshd` service (and other services as well):
+  - [Linode Tutorial on Fail2Ban](https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/) to install and configure fail2ban.
+  - **Install** (without sendmail and for CentOS make sure `epel-release` is installed and systems are up to date:
+    - **Ubuntu** (22.04): `#apt install fail2ban`
+    - **CentOS** (7): `#yum install fail2ban`
+  - Make sure `ssh` is enabled through firewall.
+  - Make local copies of:
+    - `/etc/fail2ban/fail2ban.conf -> /etc/fail2ban/fail2ban.local` : Default settings should be good enough for the start.
+    - `/etc/fail2ban/jail.conf -> /etc/fail2ban/jail.local`
+  - Configure `jail.local`:
+    - Uncomment ignore ip such that local host is not filtered and add any static IPs you regularly log from:
+      `ignoreip = 127.0.0.1/8 ::1 <Any other Public IPs>`
+    - If `sendmail` is not installed, change `mta` to regular `mail` (Not sure if you really need this):
+      `mta = mail`
+    - Enable the `sshd` jail:
+```
+[sshd]
+enabled = true
+```
+  - For CentOS, change `backend` from `auto` to `systemd`:
+    `backend = systemd`
+  - Start and enable the service so it starts at boot:
+    - `#systemctl enable fail2ban`
+    - `#systemctl start fail2ban`
+    - `#systemctl status fail2ban` to check the status if it started or any error.
+  - You can also the check the status through the client app: 
+    - `#fail2ban-client status` which will show the active jails like this:
+```
+Status
+|- Number of jail:      1
+`- Jail list:   sshd
+```
+  - And you can see the details of jail:
+    - `#fail2ban-client status sshd` which will show the details of the jail `sshd`:
+```
+Status for the jail: sshd
+|- Filter
+|  |- Currently failed: 4
+|  |- Total failed:     62
+|  `- File list:        /var/log/auth.log
+`- Actions
+   |- Currently banned: 0
+   |- Total banned:     8
+   `- Banned IP list:
+```
+  - **NOTE** the log file `/var/log/auth.log` is specified in `/etc/fail2ban/paths-common.conf`
+  - You can use `journalctl` to browse through the logs.
+   
+- **Configure Firewall**. The default application in Ubuntu `ufw` (Uncomplicated Firewall) is disabled. Follow the [Linode Tutorial](https://www.linode.com/docs/guides/configure-firewall-with-ufw/) to install and setup the firewall. Basic setup steps:
+  - Allow SSH connections: `sudo ufw allow ssh`
+  - Use the default rules:
+    - `sudo ufw default allow outgoing`
+    - `sudo ufw default deny incoming`
+  - Enable it: `sudo ufw enable`
+  - Check the status: `sudo ufw status`
+
+
 
 ### CLI Password Vault pass
 
