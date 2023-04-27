@@ -50,7 +50,7 @@ alias rm='rm -i'
   - Make sure everytime the VM is rebooted, you start dropbox.
   - _NOTE_ If your distro's repo does not have the packages, Check this Dropbox Links: [Installs](https://help.dropbox.com/installs), [On Linux](https://help.dropbox.com/installs/linux-commands#add).
 
-- Follow section [Security Hardening a Linux Server](#Security-Hardening-a-Linux-Server)  for hardening access to the server.
+- Follow section [Security Hardening a Linux Server](wiki/compute-it.html#security-hardening-a-linux-server)  for hardening access to the server.
 - **Install & Configure AWS CLI**
   - AWS CLI is mainly used for automatic backups to AWS S3.
   - Followed this [AWS User Guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
@@ -144,6 +144,11 @@ If you are dealing with binaries, even pdfs docs etc, then the git repo blows pr
 
 ### Security Hardening a Linux Server
 
+- Some good guides for securing your server/VM:
+  - This section details the steps to setup a __Ubuntu Linode VM__ following the this [guide](https://www.linode.com/docs/guides/set-up-and-secure/).
+  - [Thread from Linode community](https://www.linode.com/community/questions/467/ive-noticed-some-suspicious-activity-on-my-linode-what-do-i-do): on tracking suspious activity including running anti-virus and antimalware.
+  - [Fail2Ban Tutorial from Linode](https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/)
+
 - **Harden SSH Access** by adding authentication via private/public key pair and disable password access.
   - For **PuTTy**, use **PuTTygen** to generate private/public key pair.
   - use 4096-bit RSA or ECDSA to generate the key pair.
@@ -166,16 +171,22 @@ If you are dealing with binaries, even pdfs docs etc, then the git repo blows pr
     - `/etc/fail2ban/jail.conf -> /etc/fail2ban/jail.local`
   - Configure `jail.local`:
     - Uncomment ignore ip such that local host is not filtered and add any static IPs you regularly log from:
-      `ignoreip = 127.0.0.1/8 ::1 <Any other Public IPs>`
+```
+ignoreip = 127.0.0.1/8 ::1 <Any other Public IPs>
+```
     - If `sendmail` is not installed, change `mta` to regular `mail` (Not sure if you really need this):
-      `mta = mail`
+```
+mta = mail`
+```
     - Enable the `sshd` jail:
 ```
 [sshd]
 enabled = true
 ```
   - For CentOS, change `backend` from `auto` to `systemd`:
-    `backend = systemd`
+```
+backend = systemd
+```
   - Start and enable the service so it starts at boot:
     - `#systemctl enable fail2ban`
     - `#systemctl start fail2ban`
@@ -211,6 +222,36 @@ Status for the jail: sshd
   - Enable it: `sudo ufw enable`
   - Check the status: `sudo ufw status`
 
+### System Log Files
+
+**Using `journactl` Command**
+
+System logs are a vital resource for administrators and developers looking to monitor system performance, troubleshoot issues, and understand the events taking place within the system. 
+Check this  [Linux Journal article](https://www.linuxjournal.com/content/mastering-journalctl-command-comprehensive-guide), to learn about this command. Here are some useful ways to use `journalctl`:
+
+- `$ journalctl -r` : new entries first.
+- `$ journalctl -n 15` : view last 15 entries.
+- `$ journalctl -p 3` : priority level 3. Note, most sshd entries are in this level.
+- `$ journalctl -u fail2ban.service` : logs of a particular service.
+- `$ journalctl --list-boots`: Logs from previous boots.
+  - `$ journalctl -b -1`: Logs from a particular boot.
+- `$ journalctl -f` : real-time monitoring. 
+- `$ journactl --since yesterday`
+- `$ journalctl --disk-usage` : Shows the disk usage of the journal log files.
+  - To clean of the journal logs to a limited **size**:
+    - `$ journalctl --rotate` to move active logs to archive and 
+    - `$ journalctl --vaccum-size=250M` will delete past logs to limit size to `250Mbytes`.
+  - To make it automatic, edit `/etc/systemd/journald.conf`
+```
+SystemMaxUse = 250M
+```
+  - restart service:
+```bash
+sudo systemctl restart systemd-journald
+```
+  - To clean of the journal logs to a limited **time**:
+    - `$ journalctl --rotate` to move active logs to archive and 
+    - `$ journalctl --vaccum-time=1d` will delete past logs from begining to given time.
 
 ### CLI Password Vault pass
 
