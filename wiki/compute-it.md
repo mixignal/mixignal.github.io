@@ -50,6 +50,7 @@ alias rm='rm -i'
   - Make sure everytime the VM is rebooted, you start dropbox.
   - _NOTE_ If your distro's repo does not have the packages, Check this Dropbox Links: [Installs](https://help.dropbox.com/installs), [On Linux](https://help.dropbox.com/installs/linux-commands#add).
 
+- Follow section [#Security-Hardening-a-Linux-Server] for hardening access to the server.
 - **Install & Configure AWS CLI**
   - AWS CLI is mainly used for automatic backups to AWS S3.
   - Followed this [AWS User Guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
@@ -209,7 +210,6 @@ Status for the jail: sshd
     - `sudo ufw default deny incoming`
   - Enable it: `sudo ufw enable`
   - Check the status: `sudo ufw status`
-
 
 
 ### CLI Password Vault pass
