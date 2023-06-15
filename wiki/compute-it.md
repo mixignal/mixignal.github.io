@@ -97,6 +97,19 @@ sudo ./aws/install
 
 Tags: #git #github
  
+**ADDING A PROJECT TO A GITHUB REPO**
+
+- Create a repo without any README/.gitignore/license
+- If you are going to usee SSH (recommended), copy the SSH key to github from the "Settings->SSH/GPG Keys" menu.
+- Navigate to the project directory:
+  - `git init`
+  - `git add .`
+  - `git commit -m "init" -a`
+  - `git remote add origin <URL from Github->Code>`
+  - `git remote -v` to check
+  - `git branch -M main` Assuming this is the default branch of your repo.
+  - `git push -u origin main` 
+
 **ADDING SSH KEYS github.com**
 
 - github doesn't support https for maintaing repo using API eg. from Linux. Sp most preferre way is to clone and maintain using SSH so need to add SSH keys to the github account.
