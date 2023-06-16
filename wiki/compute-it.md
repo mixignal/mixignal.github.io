@@ -148,7 +148,7 @@ If you are dealing with binaries, even pdfs docs etc, then the git repo blows pr
 - `git rev-list --objects --all | grep {hash}`  -- This will list the file path for this hash.
 - `git filter-branch --index-filter 'git rm --cached --ignore-unmatch ./path/to/resource/*.ext' --tag-name-filter cat -- --all`
 - If you know there was an entire diretory (say `docs/public_html`) that has been deleted and you don't need it, you can delete:
-  - ``git filter-branch --index-filter 'git rm --cached --ignore-unmatch docs/public_html/*' --tag-name-filter cat -- --all`
+  - `git filter-branch --index-filter 'git rm --cached --ignore-unmatch docs/public_html/*' --tag-name-filter cat -- --all`
 - `git push origin --force --all`
 - `git push origin --force --tags` -- If you want to purge the tags as well.
 - Now, the above command will purge the history from the githib repo but the backup will be created in the .git local directory so there will be no space saving in the current working driectory. Still don't know how to clean it up properly. The way I do it now is move the directory and just clone it again.
