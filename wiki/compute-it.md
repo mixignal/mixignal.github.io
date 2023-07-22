@@ -153,6 +153,45 @@ If you are dealing with binaries, even pdfs docs etc, then the git repo blows pr
 - `git push origin --force --tags` -- If you want to purge the tags as well.
 - Now, the above command will purge the history from the githib repo but the backup will be created in the .git local directory so there will be no space saving in the current working driectory. Still don't know how to clean it up properly. The way I do it now is move the directory and just clone it again.
 
+## SINGLE BOARD COMPUTERS (SBC)
+
+### OpenMediaVault on RaspberryPi
+
+Mostly used the following as guides to install:
+
+- [Installing OpenMediaVault to a Raspbeery Pi](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwizmoe02KGAAxXFavUHHUvVAVgQFnoECA4QAQ&url=https%3A%2F%2Fpimylifeup.com%2Fraspberry-pi-openmediavault%2F&usg=AOvVaw1Iw1MJa1bGIa_1SJTSwJWb&opi=89978449)
+- [How to Install OpenMediaVault on a Raspberry Pi](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwizmoe02KGAAxXFavUHHUvVAVgQFnoECA0QAQ&url=https%3A%2F%2Fwww.makeuseof.com%2Finstall-openmediavault-raspberry-pi%2F&usg=AOvVaw2--kLBPwz6WF0Yf27PES_x&opi=89978449)
+
+### LMS on RaspberryPi
+
+This tutorial documents the steps in installing **Logitech Media Server** for organizing Music files. Also, this installation was done on the Raspberry Pi OS that is already running OpenMediaVault (OMV) . So all filesystems are managed through OMV.
+
+Followed the LMS part of [Harald Kreuzer's Blog](https://www.haraldkreuzer.net/en/news/installing-logitech-media-server-raspberry-pi-4b-5-inch-display). **NOTE** There is section in the blog about disabling the swap to increase the longetivity of the SD card. Worth looking into it.
+
+Important steps are listed below:
+
+- `sudo apt-get update && sudo apt-get upgrade -y` followed by `sudo reboot`
+- **Install LMS Server**:
+
+```
+sudo apt-get install libsox-fmt-all libflac-dev libfaad2 
+sudo apt-get install libio-socket-ssl-perl 
+sudo apt-get install libcrypt-openssl-bignum-perl 
+sudo apt-get install libcrypt-openssl-random-perl 
+sudo apt-get install libcrypt-openssl-rsa-perl 
+wget https://downloads.slimdevices.com/LogitechMediaServer_v8.3.1/logitechmediaserver_8.3.1_arm.deb 
+sudo dpkg -i logitechmediaserver_8.3.1_arm.deb
+``` 
+**NOTE** Check the latest LMS distro available.
+
+- The server will now be accessible at `http://<IP>:9000/`
+  - **NOTE** you do not need to create the logitech account. You can skipt.
+- **FIXME** Create the appropriate directory structure in OMV and configure that here.
+  - You can check this [link](https://wiki.slimdevices.com/index.php/Beginners_Guide_To_Organising.html) and [this](http://www.hydrogenaudio.org/forums/index.php?showtopic=32726) to see some popular ways to organize folders for music.
+- You can remove all unnecessary plugins. 
+- It's worth installing the `material` plugin which is a responsive plugin so the server will be accessible at `https://<IP>:9000/material` even from a mobile.
+
+
 ## Security
 
 ### Security Hardening a Linux Server
