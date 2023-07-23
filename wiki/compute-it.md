@@ -188,6 +188,11 @@ sudo dpkg -i logitechmediaserver_8.3.1_arm.deb
   - **NOTE** you do not need to create the logitech account. You can skipt.
 - **FIXME** Create the appropriate directory structure in OMV and configure that here.
   - You can check this [link](https://wiki.slimdevices.com/index.php/Beginners_Guide_To_Organising.html) and [this](http://www.hydrogenaudio.org/forums/index.php?showtopic=32726) to see some popular ways to organize folders for music.
+  - One popular choice is: `/<library>/<artist>/<album>/<tracks>`
+  - Organizing Classical Music is different (See [BegineersGuideToClassical](https://wiki.slimdevices.com/index.php/BeginnersGuideToClassical.html). A simple __tagging__ (Tagged during ripping) reco from the guide:
+    - __Album__ tag for __Work__ eg. "Beethoven Symphony no. 5 - Karajan"
+    - __Artist__ tag for __Composer__ eg. "Beethoven"
+    - __Title__ tag for __Movement__ eg. "Beethoven Symp 5 - 3- Allegro"
 - You can remove all unnecessary plugins. 
 - It's worth installing the `material` plugin which is a responsive plugin so the server will be accessible at `https://<IP>:9000/material` even from a mobile.
 
