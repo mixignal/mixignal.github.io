@@ -249,6 +249,7 @@ sudo dpkg -i logitechmediaserver_8.3.1_arm.deb
 ``` 
 **NOTE** Check the latest LMS distro available.
 
+- `sudo ufw allow 9000`
 - The server will now be accessible at `http://<IP>:9000/`
   - **NOTE** you do not need to create the logitech account. You can skipt.
 - **FIXME** Create the appropriate directory structure in OMV and configure that here.
