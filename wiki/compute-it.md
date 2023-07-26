@@ -155,14 +155,79 @@ If you are dealing with binaries, even pdfs docs etc, then the git repo blows pr
 
 ## SINGLE BOARD COMPUTERS (SBC)
 
-### OpenMediaVault on RaspberryPi
+### NAS on RaspberryPi 4
 
-Mostly used the following as guides to install:
+After install and trying to configure services **OpenMediaVault**, decided not to go with it because of restrictive options and problems with features.
 
-- [Installing OpenMediaVault to a Raspbeery Pi](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwizmoe02KGAAxXFavUHHUvVAVgQFnoECA4QAQ&url=https%3A%2F%2Fpimylifeup.com%2Fraspberry-pi-openmediavault%2F&usg=AOvVaw1Iw1MJa1bGIa_1SJTSwJWb&opi=89978449)
-- [How to Install OpenMediaVault on a Raspberry Pi](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwizmoe02KGAAxXFavUHHUvVAVgQFnoECA0QAQ&url=https%3A%2F%2Fwww.makeuseof.com%2Finstall-openmediavault-raspberry-pi%2F&usg=AOvVaw2--kLBPwz6WF0Yf27PES_x&opi=89978449)
+**INSTALLING RASPBERRY PI OS LITE**
 
-### LMS on RaspberryPi
+- Download and start the Raspberry Pi imager.
+- Choose the OS type: `Raspberry Pi OS Lite (64 bit)`
+- Choose the target SD card.
+- From _settings_ preconfigure avaialble options eg. `ssh creds, WiFi creds, hostname, etc.`. This is essential for _headless_ install.
+- Login using PuTTy using the preconfigured SSH user and update OS and install essential eg. `vim`
+
+**INSTALLING UFW FIREWALL**
+ #ufw #firewall
+
+- `sudo apt install ufw`
+- Before rebooting make sure you allow SSH: `sudo ufw allow 22`
+- Check the status `sudo ufw status`
+
+**MOUNTING EXTERNAL SSD**
+
+- Find the block device name eg. `/dev/sda` using the command `lsblk`
+- Create a partition (not necessary but highly recommended) using `fdisk`:
+  - `fdisk -l` to list all partitions available.
+  - `fdisk /dev/sda`
+  - `n` for creating a partition. For creating one Linux partition use the defaults.
+  - `p` print the partition for checking.
+  - `w` write the partition to disk.
+- Now you can see the block device for the new partition eg. `/dev/sda1` using `lsblk`
+- Create a `ext4` partition: `sudo mkfs.ext4 /dev/sda1`
+- Find the _UUID_ of the partition: `blkid /dev/sda1`
+- Create a mount point: `sudo mkdir /media/wd220`
+- Create a fstab entry in `/etc/fstab`:
+  - `UUID=5abdf860-950b-40b8-8799-49f6ce70044c /media/wd220 ext4 defaults,auto,users,rw,nofail 0 0` 
+  - **FIXME** document the options.
+- `sudo mount -a` 
+
+**CREATING A SAMBA SHARE**
+
+Could not get a Public share to work. Write permission error from Windows. After trying out lot of ways, following seem to work for a Private share.
+
+- Create the share directory: `sudo mkdir /media/wd220/Music`
+- Change owner, group and permission to the user that will be a samba user say smbuser:
+  - `sudo chown smbuser /media/wd220/Music`
+  - `sudo chgrp users /media/wd220/Music`
+  - `sudo chmod 2775 /media/wd220/Music` The 2 in the begining makes the folder sticky so users in the group "users" can write to the directory with their ownership.
+- Install _samba_ : `sudo apt-get install samba smb-client cifs-utils`
+- Add the Windows group (eg. WORKGROUP) to the global option in `/etc/samba/smb.conf`
+- Add the share folder to `/etc/samba/smb.conf`:
+
+```bash
+[Music]
+   comment = Public Music Folder
+   path = /media/wd220/Music
+   read only = no
+   guest ok = no
+   valid users = smbuser
+```
+
+- `sudo smbpasswd -a smbuser` Add the user as a Samba user. You are going to use this credential when accessing the folder from Windows.
+- Allow the SMB ports 139,445 in the firewall:
+
+```bash
+sudo ufw allow 139
+sudo ufw allow 445
+```
+
+- `sudo systemctl restart smbd` Restart the SMB daemon.
+- Now try accessing from Windows `Win+R` and entering `\\[IP/hostname]/Music`
+- Some useful links: [devconnected](https://devconnected.com/how-to-install-samba-on-debian-10-buster/#:~:text=In%20order%20for%20Samba%20to,on%20ports%20139%20and%20445.) | [ComputingForGeeks](https://computingforgeeks.com/how-to-configure-samba-share-on-debian/?expand_article=1) | [ServerSpace](https://serverspace.io/support/help/configuring-samba-on-debian/)
+
+**LOGITECH MEDIA SERVER (LMS) on RaspberryPiOS**
+ #LMS #lms #squeezebox
 
 This tutorial documents the steps in installing **Logitech Media Server** for organizing Music files. Also, this installation was done on the Raspberry Pi OS that is already running OpenMediaVault (OMV) . So all filesystems are managed through OMV.
 
@@ -195,6 +260,13 @@ sudo dpkg -i logitechmediaserver_8.3.1_arm.deb
     - _Title_ tag for _Movement_ eg. "Beethoven Symp 5 - 3- Allegro"
 - You can remove all unnecessary plugins. 
 - It's worth installing the `material` plugin which is a responsive plugin so the server will be accessible at `https://<IP>:9000/material` even from a mobile.
+
+**OpenMediaVault**
+
+After install and trying to configure services, decided not to go with it because of restrictive options and problems with features. Following links are good guides if you decide to:
+
+- [Installing OpenMediaVault to a Raspbeery Pi](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwizmoe02KGAAxXFavUHHUvVAVgQFnoECA4QAQ&url=https%3A%2F%2Fpimylifeup.com%2Fraspberry-pi-openmediavault%2F&usg=AOvVaw1Iw1MJa1bGIa_1SJTSwJWb&opi=89978449)
+- [How to Install OpenMediaVault on a Raspberry Pi](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwizmoe02KGAAxXFavUHHUvVAVgQFnoECA0QAQ&url=https%3A%2F%2Fwww.makeuseof.com%2Finstall-openmediavault-raspberry-pi%2F&usg=AOvVaw2--kLBPwz6WF0Yf27PES_x&opi=89978449)
 
 
 ## Security
