@@ -167,8 +167,10 @@ After install and trying to configure services **OpenMediaVault**, decided not t
 - From _settings_ preconfigure avaialble options eg. `ssh creds, WiFi creds, hostname, etc.`. This is essential for _headless_ install.
 - Login using PuTTy using the preconfigured SSH user and update OS and install essential eg. `vim`
 
-**INSTALLING UFW FIREWALL**
+**INSTALLING UFW FIREWALL (OPTIONAL)**
  #ufw #firewall
+
+NOT NEEDED if unit is inside a firewall.
 
 - `sudo apt install ufw`
 - Before rebooting make sure you allow SSH: `sudo ufw allow 22`
@@ -215,7 +217,7 @@ Could not get a Public share to work. Write permission error from Windows. After
 ```
 
 - `sudo smbpasswd -a smbuser` Add the user as a Samba user. You are going to use this credential when accessing the folder from Windows.
-- Allow the SMB ports 139,445 in the firewall:
+- Allow the SMB ports 139,445 in the firewall (if ufw enabled):
 
 ```bash
 sudo ufw allow 139
