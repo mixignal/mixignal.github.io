@@ -258,9 +258,12 @@ sudo dpkg -i logitechmediaserver_8.3.1_arm.deb
   - You can check these links ([BegineersGuide](https://wiki.slimdevices.com/index.php/Beginners_Guide_To_Organising.html), [Survey](http://www.hydrogenaudio.org/forums/index.php?showtopic=32726), [Organize4DJ-MP3Tags](https://homedjstudio.com/organize-music-library/)) to see some popular ways to organize folders for music.
   - One popular choice is: `/<library>/<artist>/<album>/<tracks>`
   - Organizing Classical Music is different (See [BegineersGuideToClassical](https://wiki.slimdevices.com/index.php/BeginnersGuideToClassical.html). A simple _tagging_ (Tagged during ripping) reco from the guide:
-    - _Album_ tag for _Work_ eg. "Beethoven Symphony no. 5 - Karajan"
-    - _Artist_ tag for _Composer_ eg. "Beethoven"
-    - _Title_ tag for _Movement_ eg. "Beethoven Symp 5 - 3- Allegro"
+    - the folder strategy I am using now is: `/<lib>/<composer>/<CDalbum>/<tracks>`
+    - For Various artiests: `/<lib>/<VariousArtist>/<CDalbum>/<tracks>`
+    - **Tag** reco:
+      - _Album_ tag for _Work_ eg. "Beethoven Symphony no. 5 - Karajan"
+      - _Artist_ tag for _Composer_ eg. "Beethoven"
+      - _Title_ tag for _Movement_ eg. "Beethoven Symp 5 - 3- Allegro"
 - You can remove all unnecessary plugins. 
 - It's worth installing the `material` plugin which is a responsive plugin so the server will be accessible at `https://<IP>:9000/material` even from a mobile.
 
