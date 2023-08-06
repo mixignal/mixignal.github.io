@@ -267,6 +267,15 @@ sudo dpkg -i logitechmediaserver_8.3.1_arm.deb
 - You can remove all unnecessary plugins. 
 - It's worth installing the `material` plugin which is a responsive plugin so the server will be accessible at `https://<IP>:9000/material` even from a mobile.
 
+**AWS CLI**
+
+- Check this [section](https://mixignal.github.io/wiki/compute-it.html?highlight=aws%20cli#setting-up-a-linux-vm) for installing aws cli tools.
+- **Note**, download the ARM version instead of the x86 version: 
+  - `curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"`
+
+**Setting crontab for syncing from AWS S3**
+- `00 03 * * 1 aws s3 sync --delete --profile srout s3://linode-vm01-bak /media/wd220/aws-S3/srout/linode-vm01-bak > /home/srout/logs/s3sync-linodevm01.log 2>&1`
+
 **OpenMediaVault**
 
 After install and trying to configure services, decided not to go with it because of restrictive options and problems with features. Following links are good guides if you decide to:
