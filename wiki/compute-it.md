@@ -4,7 +4,7 @@ sort: 1
 
 # COMPUTING & IT 
 
-## Cloud Computing
+## Cloud Computing and VMs
 
 ### Setting Up a Linux VM
 
@@ -92,6 +92,37 @@ sudo ./aws/install
     - `sudo apt instal build-essential bison flex libx11-dev libxaw7-dev libtool libreadline-dev libncurses-dev automake autoconf texinfo`
       - If you need the kernel headers: `sudo apt install linux-headers-'uname -r'`
     - `sudo apt install texlive-font-utils ghostscript` : For `epstpdf`,....
+
+### VIRTUAL BOX
+
+**ADDING A WINDOWS 10 SHARED FOLDER IN UBUNTU 22.04**
+
+- After installation and _before rebooting_, make sure the installation ISO image is removed from the VM's storage:
+  - `Settings -> Storage` and select the ISO and from `Attributes -> Optical Drive` select _Remove Disk from Virtual Drive`
+- After reboot and login, install some essentials:
+  - `sudo apt-get update && sudo apt-get install -y build-essential linux-headers-\`uname -r\``
+- From VM's VBox Menu select `Devices -> Insert Guest Additions CD image`
+- `lsblk` to find the mount point say `/media/cdrom/VBoxLinusGAs`
+- Run the installation script:
+  - `sudo /media/cdrom/VBoxLinuxGAs/VBoxLinuxAdditions.run`
+- Create the folder to mount the share say, `/home/ubuntu/share`
+- Add the user to `vboxsf` group (not sure if necessary but doesn't hurt):
+  - `sudo adduser ubuntu vboxsf`
+- Shutdown the VM: `sudo shutdown -h now`
+- Select from VM's Vbox Menu: `Settings -> Shared Folder -> Add New..`:
+  - Folder Path: `<Path to Windows 10 Folder>`
+  - Folder Name: `vbshare` **NOTE** This will be name of the folder in Ubuntu that will be used to mount.
+  - Mount point: `/home/ubuntu/share`
+  - _Select_ `Auto-mount`
+  - _Select_ `Make Permanent`
+- Start the VM and it should be mounted. **If NOT** Follow these steps:
+  - Add the following in `/etc/fstab`:
+    - `vbshare /home/ubuntu/share vboxsf defaults 0 0`
+    - Test it: `sudo mount -a`
+  - Add `vboxsf` in `/etc/modules` (Not sure if necessary)
+- Resources:
+  - [Mounting VirtualBox shared folders on Ubuntu Server 18.04 LTS](https://gist.github.com/estorgio/0c76e29c0439e683caca694f338d4003)
+  - [How to access a shared folder in VirtualBox? - askUbuntu](https://askubuntu.com/questions/161759/how-to-access-a-shared-folder-in-virtualbox) 
 
 ### git
 
