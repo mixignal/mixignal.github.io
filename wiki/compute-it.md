@@ -461,17 +461,17 @@ sec   4096R/AAAA2222CCCC4444 2021-03-18 [expires: 2023-03-18] uid         John D
   - `pass git push -u --all`
 
 - **Cloning the git pass**
-  - From the server export the keys:
+  - From the server (eg. linux-vm01)  export the keys:
     - `gpg --export-secret-keys > privkey.asc`
     - `gpg --export > pubkey.asc`
     - Make sure you store in a safe place.
-  - Import on the new client:
+  - Import on the new client (eg. WSL):
     - `gpg --import pubkey.asc`
     - `gpg --allow-secret-key-import --import privkey.asc`
-  - Clone the git repo from the server (FIXME: How to clone from github?)
+  - Clone the git repo from the server (linux-vm01 NOT github)
     - Setup SSH keys between client-server if it's setup that way.
-    - `git clone user@server:~/.password-store`
-    - Now you can use the client pass but push from client has issues. So best to use it only for pull. 
+    - `git clone user@linux-vm01:~/.password-store`
+    - Now you can use the client pass but for pull only. 
 
 ## Networking
 
