@@ -776,3 +776,23 @@ FIXME Refer a proper documentation for this and put some more detail in this doc
 - No copy left: MIT, new BSD
 - Some copy left with patenting & licensing 
 - All copy left: GPLs 
+
+
+## Microsoft
+
+### Updating DNS Records for MS Exchange
+
+If you have changed the domain host, you need to update the DNS records to route the emails properly.
+
+- Login to **MS 365 admin center** `https://login.microsoftonline.com`
+- Click `Settings -> Domains -> Manage DNS`
+- Select the desired domain eg. `mixignal.com`
+- Select `Exchange and Exchange Online Protection`
+- Exchange services need 3 records to work right: 
+  - **MX** tells where to deliver email messages, 
+  - **TXT** to prevent someone from spoofing your domain to send spam, and 
+  - **CNAME** for client-side Autodiscover, helping mail clients connect users to their respective mailboxes
+- For domain providers like **GoDaddy**. MS Exchange will automatically add the records.
+  - **Important**: Before adding these DNS records, make sure you've already set up email addresses _Microsoft 365_ for all existing users who still need one, or they won't be able to send and receive email.
+- You can deselect the _Advanced Options_ like Skype for Business and Device management through InTune.
+
