@@ -748,6 +748,18 @@ FIXME Refer a proper documentation for this and put some more detail in this doc
     * **NOTE** If you have more than 256 colors, you'll get an error. You can quantize it to 256 using `$ pnmquant 256 favicon.pnm > temp.pnm; mv temp.pnm favicon.pnm`
   * Convert using the the utility `ppmtowinicon` : `$ ppmtowinicon -output favicon.ico favicon.pnm`
 
+### Migration 
+
+**DockuWiki to Markdown**
+
+- `sudo apt install pandoc`
+- `find . -name "*.txt" -exec pandoc -f dokuwiki -t markdown -o {}.md {} \;`
+- To convert image links:
+  - `find . -type f -name "*.md" -exec sed -i 's/{{:foo:bar:\(.*\)}}/![\1](\/path\/to\/images\/\1)/g' {} \;`
+- To remove txt from file names:
+  - `for file in *.txt.md; do mv "$file" "${file%.txt.md}.md"; done` 
+
+
 ## Media
 
 ### Audio-Video
