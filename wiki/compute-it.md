@@ -323,6 +323,7 @@ After install and trying to configure services, decided not to go with it becaus
   - This section details the steps to setup a __Ubuntu Linode VM__ following the this [guide](https://www.linode.com/docs/guides/set-up-and-secure/).
   - [Thread from Linode community](https://www.linode.com/community/questions/467/ive-noticed-some-suspicious-activity-on-my-linode-what-do-i-do): on tracking suspious activity including running anti-virus and antimalware.
   - [Fail2Ban Tutorial from Linode](https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/)
+  - [Hardening Linux Servers Against Threats and Attacks](https://www.linuxjournal.com/content/hardening-linux-servers-against-threats-and-attacks), George Whittaker, Oct 24, Linux Journal
 
 - **Harden SSH Access** by adding authentication via private/public key pair and disable password access.
   - For **PuTTy**, use **PuTTygen** to generate private/public key pair.
