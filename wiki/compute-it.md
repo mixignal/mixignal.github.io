@@ -335,7 +335,8 @@ After install and trying to configure services, decided not to go with it becaus
   - Disable _root_ login via SSH: `PermitRootLogin no`
   - Disable _password auth_: `PasswordAuthentication no`
   - If using only IPv4 then: `AddressFamily inet`
-  - _Restart_ ssh daemon: `sudo systemctl restart sshd`
+  - _Restart_ ssh daemon: `sudo systemctl restart ssh`
+    - The service is `sshd` prior to Ubuntu 22.04
 - Use **Fail2Ban** to secure `sshd` service (and other services as well):
   - [Linode Tutorial on Fail2Ban](https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/) to install and configure fail2ban.
   - **Install** (without sendmail and for CentOS make sure `epel-release` is installed and systems are up to date:
@@ -734,6 +735,21 @@ FIXME Refer a proper documentation for this and put some more detail in this doc
     * Check out your fork's local default branch - in this case, we use `develop` FIXME need more clarity on this one:`git checkout develop(?)`
     * Merge the changes from the upstream default branch - in this case, `upstream/develop` - into your local default branch. This brings your fork's default branch into sync with the upstream repository, without losing your local changes:`git merge upstream/develop`
     * Push the changes to the fork:`git push`
+
+### Quarto on GitHub Pages
+
+**INSTALLING QUARTO**
+
+- Following instructions are for **Ubuntu 22.04** on Linode VM.
+- Download `quarto-<ver>-linux-amd64.deb` from [quarto.org](https://quarto.org/docs/get-started/)
+- Install it: `sudo apt-get install <.deb>`
+- Install `xelatex` : `sudo apt-get install texlive-xelatex`
+
+**CREATING A QUARTO BOOK**
+
+- `quarto create project book <mybook>`
+- :wq
+ 
 
 
 ### LOGOS
