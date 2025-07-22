@@ -665,6 +665,7 @@ This section shows you how to create a static web page using [Jekyll](https://je
 **PREPARING LINUX FOR JEKYLL**
   * First we need install the prereqs on a Linux workstation. Following is for the `Ubuntu` on `AWS`:
   * `sudo apt-get install ruby-full build-essential zlib1g-dev`
+  * When building the jekyll content, `gem` needs to be loaded locally.
   * In order to load `gem` locally, add the following in `.bashrc`
     * `export GEM_HOME=$HOME/gems`
     * `export PATH=$HOME/gems/bin:$PATH`
