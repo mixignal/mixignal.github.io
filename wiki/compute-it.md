@@ -747,8 +747,8 @@ ask your question in IRC.
 >>>>>>> branch-a
 ```
 
-    * Check the conflicts and delete/keep the conflicts and `add` the file `git add <file>` and commit it.
-    * Push the changes to the fork:`git push`
+    - Check the conflicts and delete/keep the conflicts and `add` the file `git add <file>` and commit it.
+    - Push the changes to the fork:`git push`
 
 ### Quarto on GitHub Pages
 
