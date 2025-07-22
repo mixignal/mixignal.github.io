@@ -733,8 +733,21 @@ FIXME Refer a proper documentation for this and put some more detail in this doc
     * Verify: `git remote -v`
   * Syncing the fork withe upstream repo:
     * Fetch the branches and their respective commits from the upstream repository. Commits to BRANCHNAME will be stored in the local branch upstream/BRANCHNAME: `git fetch upstream`
-    * Check out your fork's local default branch - in this case, we use `develop` FIXME need more clarity on this one:`git checkout develop(?)`
-    * Merge the changes from the upstream default branch - in this case, `upstream/develop` - into your local default branch. This brings your fork's default branch into sync with the upstream repository, without losing your local changes:`git merge upstream/develop`
+    * Check out your fork's local default branch : `git checkout master`
+      * To check the default branch: `git remote show origin` 
+      * Check the branch next to `HEAD` eg. `main/master` say `master`  
+    * Merge the changes from the upstream default branch - in this case, `upstream/master` - into your local default branch e.g. `master`. This brings your fork's default branch into sync with the upstream repository, without losing your local changes:`git merge upstream/master`
+    * If there are _CONFLICTS_, open the conflicted file(s) and the conflicts will be between `<<<<<<< HEAD`, `=======` and `>>>>>>> branch-a` for eg.:
+
+```
+<<<<<<< HEAD
+open an issue
+=======
+ask your question in IRC.
+>>>>>>> branch-a
+```
+
+    * Check the conflicts and delete/keep the conflicts and `add` the file `git add <file>` and commit it.
     * Push the changes to the fork:`git push`
 
 ### Quarto on GitHub Pages
