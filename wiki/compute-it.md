@@ -93,6 +93,39 @@ sudo ./aws/install
       - If you need the kernel headers: `sudo apt install linux-headers-'uname -r'`
     - `sudo apt install texlive-font-utils ghostscript` : For `epstpdf`,....
 
+- **Installing Firefox**
+  - First tried to install Chromium using the default snap and had lot issues so asked ChatGPT and this is after some trial and error seem to work.
+  - First remove firefox and Chromium if used snap
+    - `sudo snap remove chromium firefox`
+    - `sudo apt remove chromium firefox`
+  - Avoid snap auto-pull but it still seems to auto-pull but worked with firefox
+    - `sudo apt purge snapd -y`
+  - XFCE was already installed but if not:
+    - `sudo apt update && sudo apt install -y xfce4 xfce4-goodies`
+  - Install Firefox (APT version):
+    - `sudo add-apt-repository ppa:mozillateam/ppa -y`
+    - `sudo apt update`
+    - `sudo apt install -y firefox`
+  - Pin to avoid snap fallback:
+
+```bash
+cat <<EOF | sudo tee /etc/apt/preferences.d/firefox
+Package: firefox*
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+EOF
+```
+
+  - VNC setup 
+
+```bash
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+exec startxfce4
+```
+
+
 ### VIRTUAL BOX
 
 **ADDING A WINDOWS 10 SHARED FOLDER IN UBUNTU 22.04**
