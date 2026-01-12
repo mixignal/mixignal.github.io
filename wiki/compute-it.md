@@ -125,6 +125,106 @@ unset DBUS_SESSION_BUS_ADDRESS
 exec startxfce4
 ```
 
+### Setting up Mutt with Gmail OAuth2 on Ubuntu 24.04 VM 
+
+Reference: [Perplexity Thread](https://www.perplexity.ai/search/mutt-email-client-on-ubuntu-24-vxIq.Rq2SQOU4zNTgefs.g#0)
+
+Requires installing packages, obtaining Google credentials, generating tokens with `mutt_oauth2.py`, and configuring Mutt.
+`
+This process uses Mutt's built-in OAuth2 support available since version 2.0, which Ubuntu 24.04 provides.[1][2]
+
+**Install Packages**
+
+Update your system and install Mutt along with dependencies for OAuth2 and GPG encryption.  
+
+```
+sudo apt update
+sudo apt install mutt gpg pinentry-gtk2 python3
+```  
+
+Mutt on Ubuntu 24.04 supports OAuth2 natively, and Python3 handles the token script.[2][1]
+
+**Enable Gmail IMAP**
+
+Log into your Gmail account, go to `Settings > See all settings > Forwarding and POP/IMAP` tab, and enable `IMAP`. Note this is typically enabled by default.
+  
+Enable 2-factor authentication if not already active, as OAuth2 requires it for security.[3]
+
+**Create Google App Credentials**
+
+Visit the Google Cloud Console (console.cloud.google.com), create a new project or select one, and enable the Gmail API.  
+Create OAuth 2.0 credentials (Desktop application type), download the JSON file, and note the `client_id` and `client_secret`.[4][2]
+
+**Download and Setup mutt_oauth2.py**
+
+Download the official script from Mutt's repository:  
+
+```
+mkdir -p ~/.mutt
+cd ~/.mutt
+wget https://gitlab.com/muttmua/mutt/-/raw/master/contrib/mutt_oauth2.py
+chmod +x mutt_oauth2.py
+```  
+
+Edit `mutt_oauth2.py` to:
+ -  insert your _client_id_ 
+ -  insert your _client_secret_ near lines 61-62.[5][3]
+ -  substitute `YOUR_GPG_IDENTITY` with key ID or email 
+
+**Generate GPG Key and Token**
+
+Generate a GPG key: 
+
+```
+gpg --gen-key
+``` 
+
+(use your Gmail address as identity).  
+Export GPG_TTY and authorize:  
+
+```
+export GPG_TTY=$(tty)
+~/.mutt/mutt_oauth2.py ~/your.email@gmail.com.token --verbose --authorize
+```  
+
+Select `google`, `authcode`, paste the browser code (even if "site can't be reached"). Test with `--test`.[2][3]
+
+## Configure Mutt
+
+Create or edit `~/.muttrc` with these settings (replace with your details):  
+
+```
+set imap_user = 'your.email@gmail.com'
+set realname = 'Your Name'
+set from = 'your.email@gmail.com'
+set smtp_url = 'smtps://your.email@gmail.com@smtp.gmail.com:465/'
+set folder = 'imaps://imap.gmail.com/'
+set spoolfile = '+INBOX'
+set ssl_force_tls = yes
+set smtp_authenticators = ${imap_authenticators}
+set smtp_oauth_refresh_command = ${imap_oauth_refresh_command}
+```  
+
+These two lines were also there which I thin is either OR: (FIXME)
+
+```
+set imap_authenticators = 'oauthbearer:xoauth2'
+set imap_oauth_refresh_command = '~/.mutt/mutt_oauth2.py ~/your.email@gmail.com.token'
+```
+
+Run `mutt` to test; use 'G' to fetch mail. Tokens refresh automatically.[3][4][2]
+
+
+**Troubleshooting**
+
+- `mutt_oauth2.py --test ~/your.email@gmail.com.token --test` to validate token
+- `set pgp_sign_as = user@gmail.com`  if needed
+- To debug Mutt, add the following `~/.muttrc`
+  - `set debug_level = 5`
+  - `set debug_file  = "~/.muttdebug0"`
+- to test smtp server:
+  - `ping smtp.gmail.com`
+  - `openssl s_client -connect smtp.gmail.com:465`
 
 ### VIRTUAL BOX
 
