@@ -189,7 +189,7 @@ export GPG_TTY=$(tty)
 
 Select `google`, `authcode`, paste the browser code (even if "site can't be reached"). Test with `--test`.[2][3]
 
-## Configure Mutt
+**Configure Mutt**
 
 Create or edit `~/.muttrc` with these settings (replace with your details):  
 
