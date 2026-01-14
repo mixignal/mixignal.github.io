@@ -1,8 +1,0 @@
-site_name: Mixignal Academy 
-
-theme:
-  name: material
-
-nav:
-  - Home: index.md
-

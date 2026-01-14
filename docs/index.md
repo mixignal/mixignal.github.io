@@ -1,3 +1,0 @@
-# CICN
-
-First line
