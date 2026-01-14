@@ -34,3 +34,7 @@ exclude:
   - package-lock.json
   - webpack.config.js
   - jekyll-rtd-theme.gemspec
+  - vendor
+  - vendor/bundle
+  - tmp
+  - log
