@@ -1,7 +1,9 @@
 title: Mixignal Innovations  
 description: Documentation
 
-theme: null
+#theme: null
+remote_theme: clearpathrobotics/jekyll-rtd-theme
+
 
 #url: 
 #baseurl: 
